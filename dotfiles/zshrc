@@ -45,7 +45,14 @@ fi
 autoload -Uz colors
 colors
 
-PROMPT='%m%# '
+case "$TERM" in
+  xterm-color|*-256color)
+    PROMPT='%F{green}%n@%m%f:%F{blue}%~%f %# '
+    ;;
+  *)
+    PROMPT='%n@%m:%~%# '
+    ;;
+esac
 RPROMPT=''
 
 alias ll='ls -lah'
