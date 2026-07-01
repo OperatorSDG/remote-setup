@@ -1,0 +1,100 @@
+# Clean remote shell config.
+# Host-specific values belong in ~/.config/remote-setup/local.zsh.
+
+if [ -z "${EDITOR:-}" ] && command -v nvim >/dev/null 2>&1; then
+  export EDITOR="nvim"
+else
+  export EDITOR="${EDITOR:-vi}"
+fi
+export VISUAL="${VISUAL:-$EDITOR}"
+export PAGER="${PAGER:-less}"
+export LESS="${LESS:--FRX}"
+export HISTFILE="${HISTFILE:-$HOME/.zsh_history}"
+export HISTSIZE="${HISTSIZE:-50000}"
+export SAVEHIST="${SAVEHIST:-50000}"
+
+path_prepend() {
+  case ":$PATH:" in
+    *":$1:"*) ;;
+    *) PATH="$1:$PATH" ;;
+  esac
+}
+
+path_prepend "$HOME/.local/bin"
+path_prepend "$HOME/bin"
+export PATH
+
+setopt auto_cd
+setopt auto_pushd
+setopt extended_history
+setopt hist_ignore_all_dups
+setopt hist_reduce_blanks
+setopt inc_append_history
+setopt interactive_comments
+setopt no_beep
+setopt prompt_subst
+setopt share_history
+
+autoload -Uz compinit
+if [ -n "${ZDOTDIR:-}" ]; then
+  compinit -d "$ZDOTDIR/.zcompdump"
+else
+  compinit -d "$HOME/.zcompdump"
+fi
+
+autoload -Uz colors
+colors
+
+if [ -n "${SSH_CONNECTION:-}" ]; then
+  REMOTE_MARK="%F{yellow}ssh%f "
+else
+  REMOTE_MARK=""
+fi
+
+PROMPT='${REMOTE_MARK}%F{green}%n@%m%f:%F{blue}%~%f %# '
+RPROMPT='%(?..%F{red}%?%f)'
+
+alias ll='ls -lah'
+alias la='ls -A'
+alias l='ls -CF'
+alias ..='cd ..'
+alias ...='cd ../..'
+alias grep='grep --color=auto'
+alias mkdir='mkdir -p'
+alias reload-shell='exec "$SHELL" -l'
+alias path='printf "%s\n" ${(s/:/)PATH}'
+
+if command -v nvim >/dev/null 2>&1; then
+  alias vim='nvim'
+fi
+
+if command -v mise >/dev/null 2>&1; then
+  eval "$(mise activate zsh)"
+fi
+
+mkcd() {
+  mkdir -p "$1" && cd "$1"
+}
+
+extract() {
+  [ -f "$1" ] || {
+    printf '%s\n' "extract: not a file: $1" >&2
+    return 1
+  }
+
+  case "$1" in
+    *.tar.bz2) tar xjf "$1" ;;
+    *.tar.gz) tar xzf "$1" ;;
+    *.tar.xz) tar xJf "$1" ;;
+    *.tar) tar xf "$1" ;;
+    *.tbz2) tar xjf "$1" ;;
+    *.tgz) tar xzf "$1" ;;
+    *.zip) unzip "$1" ;;
+    *.gz) gunzip "$1" ;;
+    *) printf '%s\n' "extract: unsupported archive: $1" >&2; return 1 ;;
+  esac
+}
+
+if [ -f "$HOME/.config/remote-setup/local.zsh" ]; then
+  . "$HOME/.config/remote-setup/local.zsh"
+fi

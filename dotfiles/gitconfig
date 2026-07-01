@@ -1,0 +1,42 @@
+[user]
+	useConfigOnly = true
+
+[init]
+	defaultBranch = main
+
+[pull]
+	ff = only
+
+[push]
+	default = simple
+	autoSetupRemote = true
+
+[fetch]
+	prune = true
+
+[rerere]
+	enabled = true
+
+[diff]
+	algorithm = histogram
+	colorMoved = default
+
+[merge]
+	conflictStyle = zdiff3
+
+[color]
+	ui = auto
+
+[alias]
+	st = status --short --branch
+	co = checkout
+	br = branch
+	sw = switch
+	ci = commit
+	lg = log --graph --decorate --oneline --all
+	last = log -1 HEAD --stat
+	unstage = restore --staged
+
+[include]
+	path = ~/.config/remote-setup/gitconfig.local
+

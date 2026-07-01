@@ -1,0 +1,37 @@
+#!/usr/bin/env sh
+set -eu
+
+check() {
+  name="$1"
+  command="$2"
+
+  if command -v "$command" >/dev/null 2>&1; then
+    printf 'ok   %s: %s\n' "$name" "$(command -v "$command")"
+  else
+    printf 'miss %s: %s\n' "$name" "$command"
+  fi
+}
+
+printf 'remote-setup doctor\n'
+printf 'home: %s\n' "$HOME"
+printf 'shell: %s\n' "${SHELL:-unknown}"
+printf 'profile: '
+if [ -f "$HOME/.config/remote-setup/profile" ]; then
+  cat "$HOME/.config/remote-setup/profile"
+else
+  printf 'unknown\n'
+fi
+
+check git git
+check zsh zsh
+check tmux tmux
+check curl curl
+check nvim nvim
+check mise mise
+
+printf 'path contains ~/.local/bin: '
+case ":$PATH:" in
+  *":$HOME/.local/bin:"*) printf 'yes\n' ;;
+  *) printf 'no\n' ;;
+esac
+
