@@ -77,7 +77,7 @@ if command -v fzf >/dev/null 2>&1; then
     export FZF_CTRL_R_OPTS='--sort --exact'
   fi
   if [ -z "${FZF_CTRL_T_OPTS:-}" ]; then
-    export FZF_CTRL_T_OPTS='--preview '"'"'if [ -d {q} ]; then ls -la -- {q}; else sed -n "1,80p" -- {q} 2>/dev/null || ls -la -- {q}; fi'"'"
+    export FZF_CTRL_T_OPTS='--height 40% --layout=reverse --border'
   fi
 
   if command -v fd >/dev/null 2>&1; then
