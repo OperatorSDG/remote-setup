@@ -45,14 +45,8 @@ fi
 autoload -Uz colors
 colors
 
-if [ -n "${SSH_CONNECTION:-}" ]; then
-  REMOTE_MARK="%F{yellow}ssh%f "
-else
-  REMOTE_MARK=""
-fi
-
-PROMPT='${REMOTE_MARK}%F{green}%n@%m%f:%F{blue}%~%f %# '
-RPROMPT='%(?..%F{red}%?%f)'
+PROMPT='%m%# '
+RPROMPT=''
 
 alias ll='ls -lah'
 alias la='ls -A'
