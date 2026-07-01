@@ -34,6 +34,7 @@ Installed scripts:
 
 - `~/.local/bin/remote-update`
 - `~/.local/bin/remote-doctor`
+- `~/.local/bin/remote-install-fzf`
 
 Local-only machine config:
 
@@ -47,6 +48,17 @@ remote-update
 ```
 
 This pulls the latest repo changes when the repo has a Git remote, then reruns the installer with the saved profile.
+
+## Optional Tools
+
+Install `fzf` on a remote machine:
+
+```sh
+remote-install-fzf
+exec zsh
+```
+
+When `fzf` is present, zsh automatically enables fuzzy history search, file selection, and directory jumping using the available shell integration.
 
 ## Local Overrides
 
@@ -64,4 +76,3 @@ alias logs='journalctl --user -n 200'
 ```
 
 Do not commit secrets or host-specific paths into this repo.
-

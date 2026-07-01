@@ -27,6 +27,8 @@ check zsh zsh
 check tmux tmux
 check curl curl
 check nvim nvim
+check fzf fzf
+check fd fd
 check mise mise
 
 printf 'path contains ~/.local/bin: '
@@ -34,4 +36,3 @@ case ":$PATH:" in
   *":$HOME/.local/bin:"*) printf 'yes\n' ;;
   *) printf 'no\n' ;;
 esac
-

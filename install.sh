@@ -95,6 +95,7 @@ link_file "$REPO_DIR/dotfiles/tmux.conf" "$HOME/.tmux.conf"
 
 install_script "$REPO_DIR/scripts/remote-update"
 install_script "$REPO_DIR/scripts/remote-doctor"
+install_script "$REPO_DIR/scripts/remote-install-fzf"
 
 if [ -f "$REPO_DIR/profiles/$PROFILE.sh" ]; then
   sh "$REPO_DIR/profiles/$PROFILE.sh"

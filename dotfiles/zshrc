@@ -69,6 +69,49 @@ if command -v nvim >/dev/null 2>&1; then
   alias vim='nvim'
 fi
 
+if command -v fzf >/dev/null 2>&1; then
+  export FZF_DEFAULT_OPTS="${FZF_DEFAULT_OPTS:---height 40% --layout=reverse --border}"
+  export FZF_CTRL_R_OPTS="${FZF_CTRL_R_OPTS:---sort --exact}"
+  export FZF_CTRL_T_OPTS="${FZF_CTRL_T_OPTS:---preview 'ls -la {} 2>/dev/null | head -80'}"
+
+  if command -v fd >/dev/null 2>&1; then
+    export FZF_DEFAULT_COMMAND="${FZF_DEFAULT_COMMAND:-fd --type f --hidden --follow --exclude .git}"
+    export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+    export FZF_ALT_C_COMMAND="${FZF_ALT_C_COMMAND:-fd --type d --hidden --follow --exclude .git}"
+  fi
+
+  if [ -f "$HOME/.fzf.zsh" ]; then
+    . "$HOME/.fzf.zsh"
+  elif [ -f "$HOME/.fzf/shell/key-bindings.zsh" ]; then
+    . "$HOME/.fzf/shell/key-bindings.zsh"
+    [ -f "$HOME/.fzf/shell/completion.zsh" ] && . "$HOME/.fzf/shell/completion.zsh"
+  else
+    for fzf_zsh_file in \
+      /usr/share/doc/fzf/examples/key-bindings.zsh \
+      /usr/share/fzf/key-bindings.zsh \
+      /opt/homebrew/opt/fzf/shell/key-bindings.zsh \
+      /usr/local/opt/fzf/shell/key-bindings.zsh
+    do
+      if [ -f "$fzf_zsh_file" ]; then
+        . "$fzf_zsh_file"
+        break
+      fi
+    done
+
+    for fzf_completion_file in \
+      /usr/share/doc/fzf/examples/completion.zsh \
+      /usr/share/fzf/completion.zsh \
+      /opt/homebrew/opt/fzf/shell/completion.zsh \
+      /usr/local/opt/fzf/shell/completion.zsh
+    do
+      if [ -f "$fzf_completion_file" ]; then
+        . "$fzf_completion_file"
+        break
+      fi
+    done
+  fi
+fi
+
 if command -v mise >/dev/null 2>&1; then
   eval "$(mise activate zsh)"
 fi
