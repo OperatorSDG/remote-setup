@@ -19,54 +19,54 @@ ensure_dir() {
 }
 
 backup_path() {
-  path="$1"
-  [ -e "$path" ] || [ -L "$path" ] || return 0
+  backup_source_path="$1"
+  [ -e "$backup_source_path" ] || [ -L "$backup_source_path" ] || return 0
 
   ensure_dir "$BACKUP_DIR"
-  target="$BACKUP_DIR/$(basename "$path")"
-  info "backing up $path to $target"
-  mv "$path" "$target"
+  backup_target_path="$BACKUP_DIR/$(basename "$backup_source_path")"
+  info "backing up $backup_source_path to $backup_target_path"
+  mv "$backup_source_path" "$backup_target_path"
 }
 
 link_file() {
-  source="$1"
-  target="$2"
+  link_source_path="$1"
+  link_target_path="$2"
 
-  [ -f "$source" ] || die "missing source file: $source"
+  [ -f "$link_source_path" ] || die "missing source file: $link_source_path"
 
-  if [ -L "$target" ]; then
-    current=$(readlink "$target")
-    if [ "$current" = "$source" ]; then
-      info "already linked: $target"
+  if [ -L "$link_target_path" ]; then
+    link_current_target=$(readlink "$link_target_path")
+    if [ "$link_current_target" = "$link_source_path" ]; then
+      info "already linked: $link_target_path"
       return 0
     fi
   fi
 
-  backup_path "$target"
-  ensure_dir "$(dirname "$target")"
-  ln -s "$source" "$target"
-  info "linked $target"
+  backup_path "$link_target_path"
+  ensure_dir "$(dirname "$link_target_path")"
+  ln -s "$link_source_path" "$link_target_path"
+  info "linked $link_target_path"
 }
 
 install_script() {
-  source="$1"
-  target="$HOME/.local/bin/$(basename "$source")"
+  script_source_path="$1"
+  script_target_path="$HOME/.local/bin/$(basename "$script_source_path")"
 
-  [ -f "$source" ] || die "missing script: $source"
+  [ -f "$script_source_path" ] || die "missing script: $script_source_path"
   ensure_dir "$HOME/.local/bin"
-  cp "$source" "$target"
-  chmod 755 "$target"
-  info "installed $(basename "$target")"
+  cp "$script_source_path" "$script_target_path"
+  chmod 755 "$script_target_path"
+  info "installed $(basename "$script_target_path")"
 }
 
 write_once() {
-  path="$1"
-  content="$2"
+  write_path="$1"
+  write_content="$2"
 
-  if [ ! -e "$path" ]; then
-    ensure_dir "$(dirname "$path")"
-    printf '%s\n' "$content" > "$path"
-    info "created $path"
+  if [ ! -e "$write_path" ]; then
+    ensure_dir "$(dirname "$write_path")"
+    printf '%s\n' "$write_content" > "$write_path"
+    info "created $write_path"
   fi
 }
 
