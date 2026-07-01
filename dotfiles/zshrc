@@ -70,9 +70,15 @@ if command -v nvim >/dev/null 2>&1; then
 fi
 
 if command -v fzf >/dev/null 2>&1; then
-  export FZF_DEFAULT_OPTS="${FZF_DEFAULT_OPTS:---height 40% --layout=reverse --border}"
-  export FZF_CTRL_R_OPTS="${FZF_CTRL_R_OPTS:---sort --exact}"
-  export FZF_CTRL_T_OPTS="${FZF_CTRL_T_OPTS:---preview 'ls -la {} 2>/dev/null | head -80'}"
+  if [ -z "${FZF_DEFAULT_OPTS:-}" ]; then
+    export FZF_DEFAULT_OPTS='--height 40% --layout=reverse --border'
+  fi
+  if [ -z "${FZF_CTRL_R_OPTS:-}" ]; then
+    export FZF_CTRL_R_OPTS='--sort --exact'
+  fi
+  if [ -z "${FZF_CTRL_T_OPTS:-}" ]; then
+    export FZF_CTRL_T_OPTS='--preview '"'"'if [ -d {q} ]; then ls -la -- {q}; else sed -n "1,80p" -- {q} 2>/dev/null || ls -la -- {q}; fi'"'"
+  fi
 
   if command -v fd >/dev/null 2>&1; then
     export FZF_DEFAULT_COMMAND="${FZF_DEFAULT_COMMAND:-fd --type f --hidden --follow --exclude .git}"
