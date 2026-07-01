@@ -47,7 +47,7 @@ colors
 
 case "$TERM" in
   xterm-color|*-256color)
-    PROMPT='%F{green}%n@%m%f:%F{blue}%~%f %# '
+    PROMPT='%B%F{green}%n@%m%f%b:%B%F{blue}%~%f%b %# '
     ;;
   *)
     PROMPT='%n@%m:%~%# '
